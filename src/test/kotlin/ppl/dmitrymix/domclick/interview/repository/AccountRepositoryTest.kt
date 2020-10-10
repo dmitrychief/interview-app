@@ -13,6 +13,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.transaction.annotation.Transactional
 import ppl.dmitrymix.domclick.interview.entity.Account
 import ppl.dmitrymix.domclick.interview.utils.PostgreSQLIntegrationTest
+import java.math.BigDecimal
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -31,6 +32,6 @@ class AccountRepositoryTest : PostgreSQLIntegrationTest() {
     fun getByIdAndByUserId_should_returnAccounts() {
         val account = accountRepository.findByIdAndUserId(1, 1)
 
-        assertThat(account).isEqualTo(Account(1, 1, 1))
+        assertThat(account).isEqualTo(Account(1, 1, BigDecimal.ONE))
     }
 }

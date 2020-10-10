@@ -8,5 +8,5 @@ databaseChangeLog:
         CREATE TABLE account(
               id BIGSERIAL PRIMARY KEY NOT NULL,
               user_id BIGINT NOT NULL,
-              amount BIGINT NOT NULL
+              amount TEXT NOT NULL
         );
