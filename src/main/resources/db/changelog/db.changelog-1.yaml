@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: dmitrymix
+      comment: create account table
+      sql: |
+
+        CREATE TABLE account(
+              id BIGSERIAL PRIMARY KEY NOT NULL,
+              user_id BIGINT NOT NULL,
+              amount BIGINT NOT NULL
+        );
