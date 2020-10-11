@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 data class Account(
         @Id
-        var id: Long?,
+        var id: Long? = null,
         var userId: Long,
         var amount: BigDecimal
 )

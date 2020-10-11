@@ -29,9 +29,19 @@ class AccountRepositoryTest : PostgreSQLIntegrationTest() {
 
     @Test
     @DatabaseSetup("/dbunit/account/account.xml")
-    fun getByIdAndByUserId_should_returnAccounts() {
+    fun findByIdAndByUserId_should_returnAccounts() {
         val account = accountRepository.findByIdAndUserId(1, 1)
 
         assertThat(account).isEqualTo(Account(1, 1, BigDecimal.ONE))
+    }
+
+    @Test
+    @DatabaseSetup("/dbunit/account/account.xml")
+    fun findAllByUserId_should_returnAccounts() {
+        val accounts = accountRepository.findAllByUserId(1)
+
+        assertThat(accounts).containsExactlyInAnyOrder(
+                Account(1, 1, BigDecimal.ONE), Account(2, 1, BigDecimal.valueOf(2))
+        )
     }
 }
