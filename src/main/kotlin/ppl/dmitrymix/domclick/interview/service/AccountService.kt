@@ -78,13 +78,14 @@ class AccountService(private val accountRepository: AccountRepository) {
 
         validate(amount)
         //invoke service methods in the same transaction
-        val savedAccount = transferOut(id, userId, amount)
-        transferIn(toAccountId, toUserId, amount)
+        val savedFromAccount = transferOut(id, userId, amount)
+        val savedToAccount = transferIn(toAccountId, toUserId, amount)
 
-        logger.info("account transferTo finished, [id={}, userId={}, amount={}, toAccountId={}, toUserId={}, result={}]",
-                id, userId, amount, toAccountId, toUserId, savedAccount)
+        logger.info("account transferTo finished, [id={}, userId={}, amount={}, toAccountId={}, toUserId={}, " +
+                "fromAccount={}, toAccount={}]",
+                id, userId, amount, toAccountId, toUserId, savedFromAccount, savedToAccount)
 
-        return savedAccount
+        return savedFromAccount
     }
 
     private fun validate(amount: BigDecimal) {

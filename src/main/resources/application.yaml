@@ -1,12 +1,10 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/
+    username: user
+    password: pass
 
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-
-  http:
-    encoding:
-      charset: UTF-8
-      enabled: true

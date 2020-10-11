@@ -7,6 +7,7 @@ plugins {
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
 	kotlin("plugin.allopen") version "1.3.72"
+	id("com.google.cloud.tools.jib") version "2.6.0"
 }
 
 group = "ppl.dmitrymix"
@@ -56,5 +57,15 @@ tasks.withType<KotlinCompile> {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "1.8"
 		charset("UTF-8")
+	}
+}
+
+springBoot {
+	mainClassName = "ppl.dmitrymix.domclick.interview.DomclickInterviewApplication"
+}
+
+jib {
+	to {
+		image = "dmikhailov1/domclick-interview"
 	}
 }
