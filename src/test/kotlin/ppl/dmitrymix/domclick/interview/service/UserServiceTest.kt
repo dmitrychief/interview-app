@@ -17,13 +17,13 @@ import java.util.*
 class UserServiceTest : AbstractServiceTest() {
 
     @Autowired
-    lateinit var userService: UserService
+    private lateinit var userService: UserService
 
     @Autowired
-    lateinit var accountRepository: AccountRepository
+    private lateinit var accountRepository: AccountRepository
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    private lateinit var userRepository: UserRepository
 
     @Test
     fun getAll_should_returnUsers() {

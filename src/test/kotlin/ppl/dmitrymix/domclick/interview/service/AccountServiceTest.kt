@@ -17,10 +17,10 @@ import java.math.BigDecimal
 class AccountServiceTest : AbstractServiceTest() {
 
     @Autowired
-    lateinit var accountService: AccountService
+    private lateinit var accountService: AccountService
 
     @Autowired
-    lateinit var accountRepository: AccountRepository
+    private lateinit var accountRepository: AccountRepository
 
     @Test
     fun getAll_should_returnUserAccounts() {
