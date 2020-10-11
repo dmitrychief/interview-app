@@ -22,6 +22,8 @@ abstract class AbstractServiceTest {
     @MockBean
     private lateinit var userRepository: UserRepository
 
+    // for the simplicity we start whole spring context, excluding things like db that are not needed for service tests.
+    // todo: remove autoconfiguration, introduce manual componentScan to configure services only
     @TestConfiguration
     @EnableAutoConfiguration(exclude = [
         LiquibaseAutoConfiguration::class, DataSourceAutoConfiguration::class, SecurityAutoConfiguration::class,
