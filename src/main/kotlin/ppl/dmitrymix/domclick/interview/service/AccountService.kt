@@ -24,11 +24,11 @@ class AccountService(private val accountRepository: AccountRepository) {
     }
 
     fun create(userId: Long): Account {
-        logger.info("account add started, [userId={}]", userId)
+        logger.info("account create started, [userId={}]", userId)
 
         val savedAccount = accountRepository.save(Account(userId = userId, amount = BigDecimal.ZERO))
 
-        logger.info("account add finished, [userId={}, result={}]", userId, savedAccount)
+        logger.info("account create finished, [userId={}, result={}]", userId, savedAccount)
         return savedAccount
     }
 

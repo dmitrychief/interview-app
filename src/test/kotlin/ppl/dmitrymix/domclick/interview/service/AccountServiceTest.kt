@@ -6,25 +6,18 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.AdditionalAnswers.returnsFirstArg
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import ppl.dmitrymix.domclick.interview.entity.Account
 import ppl.dmitrymix.domclick.interview.repository.AccountRepository
 import java.math.BigDecimal
 
-@SpringBootTest
-@EnableAutoConfiguration(exclude = [LiquibaseAutoConfiguration::class, DataSourceAutoConfiguration::class])
-class AccountServiceTest {
+class AccountServiceTest : AbstractServiceTest() {
 
     @Autowired
     lateinit var accountService: AccountService
 
-    @MockBean
+    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Test
