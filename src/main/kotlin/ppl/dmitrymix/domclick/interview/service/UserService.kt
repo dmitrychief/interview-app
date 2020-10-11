@@ -6,11 +6,12 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ppl.dmitrymix.domclick.interview.entity.User
+import ppl.dmitrymix.domclick.interview.repository.AccountRepository
 import ppl.dmitrymix.domclick.interview.repository.UserRepository
 
 @Service
 @Transactional
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository, private val accountRepository: AccountRepository) {
     private val logger: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     @Transactional(readOnly = true)
@@ -50,6 +51,9 @@ class UserService(private val userRepository: UserRepository) {
 
         val userToDelete = userRepository.findById(id)
                 .orElseThrow { EmptyResultDataAccessException("user not found, id=$id", 1) }
+
+        val userAccounts = accountRepository.findAllByUserId(id)
+        accountRepository.deleteAll(userAccounts)
         userRepository.delete(userToDelete)
 
         logger.info("user delete finished, [id={}, result={}]", id, userToDelete)
