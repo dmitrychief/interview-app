@@ -12,7 +12,7 @@ import ppl.dmitrymix.domclick.interview.service.UserService
 
 @WebMvcTest
 @ContextConfiguration
-open class AbstractControllerTest {
+abstract class AbstractControllerTest {
     @MockBean
     private lateinit var accountService: AccountService
 

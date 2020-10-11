@@ -2,11 +2,11 @@ package ppl.dmitrymix.domclick.interview
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import ppl.dmitrymix.domclick.interview.utils.PostgreSQLIntegrationTest
+import ppl.dmitrymix.domclick.interview.utils.AbstractPostgreSQLIntegrationTest
 
 
 @SpringBootTest
-class DomclickInterviewApplicationTests : PostgreSQLIntegrationTest() {
+class DomclickInterviewApplicationTest : AbstractPostgreSQLIntegrationTest() {
 
     @Test
     fun contextLoads() {

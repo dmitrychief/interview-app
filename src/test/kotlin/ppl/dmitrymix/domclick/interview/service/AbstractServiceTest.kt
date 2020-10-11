@@ -14,7 +14,7 @@ import ppl.dmitrymix.domclick.interview.repository.UserRepository
 
 @SpringBootTest
 @ContextConfiguration
-class AbstractServiceTest {
+abstract class AbstractServiceTest {
 
     @MockBean
     private lateinit var accountRepository: AccountRepository

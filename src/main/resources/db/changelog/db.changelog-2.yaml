@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: dmitrymix
+      comment: create users table
+      sql: |
+
+        CREATE TABLE users(
+              id BIGSERIAL PRIMARY KEY NOT NULL,
+              name TEXT NOT NULL
+        );

@@ -1,29 +1,13 @@
 package ppl.dmitrymix.domclick.interview.repository
 
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener
 import com.github.springtestdbunit.annotation.DatabaseSetup
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.test.context.TestExecutionListeners
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
-import org.springframework.transaction.annotation.Transactional
 import ppl.dmitrymix.domclick.interview.entity.Account
-import ppl.dmitrymix.domclick.interview.utils.PostgreSQLIntegrationTest
 import java.math.BigDecimal
 
-@DataJdbcTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestExecutionListeners(
-        DependencyInjectionTestExecutionListener::class,
-        DirtiesContextTestExecutionListener::class,
-        TransactionDbUnitTestExecutionListener::class
-)
-@Transactional
-class AccountRepositoryTest : PostgreSQLIntegrationTest() {
+class AccountRepositoryTest : AbstractRepositoryTest() {
     @Autowired
     private lateinit var accountRepository: AccountRepository
 
