@@ -3,6 +3,7 @@ package ppl.dmitrymix.domclick.interview.service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ppl.dmitrymix.domclick.interview.entity.Account
 import ppl.dmitrymix.domclick.interview.repository.AccountRepository
@@ -44,6 +45,7 @@ class AccountService(private val accountRepository: AccountRepository) {
     fun transferIn(id: Long, userId: Long, amount: BigDecimal): Account {
         logger.info("account transferIn started, [id={}, userId={}, amount={}]", id, userId, amount)
 
+        validate(amount)
         val account = accountRepository.findByIdAndUserId(id, userId)
         account.amount += amount
         val savedAccount = accountRepository.save(account)
@@ -55,13 +57,12 @@ class AccountService(private val accountRepository: AccountRepository) {
     }
 
     fun transferOut(id: Long, userId: Long, amount: BigDecimal): Account {
-        logger.info("transferOut started, [id={}, userId={}, amount={}]", id, userId, amount)
+        logger.info("account transferOut started, [id={}, userId={}, amount={}]", id, userId, amount)
 
+        validate(amount)
         val account = accountRepository.findByIdAndUserId(id, userId)
         account.amount -= amount
-        if (account.amount < BigDecimal.ZERO) {
-            throw IllegalArgumentException("overdraft is not possible")
-        }
+        validate(account)
         val savedAccount = accountRepository.save(account)
 
         logger.info("account transferOut finished, [id={}, userId={}, amount={}, result={}]",
@@ -70,5 +71,32 @@ class AccountService(private val accountRepository: AccountRepository) {
         return savedAccount
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    fun transferTo(id: Long, userId: Long, amount: BigDecimal, toAccountId: Long, toUserId: Long): Account {
+        logger.info("account transferTo started, [id={}, userId={}, amount={}, toAccountId={}, toUserId={}]",
+                id, userId, amount, toAccountId, toUserId)
+
+        validate(amount)
+        //invoke service methods in the same transaction
+        val savedAccount = transferOut(id, userId, amount)
+        transferIn(toAccountId, toUserId, amount)
+
+        logger.info("account transferTo finished, [id={}, userId={}, amount={}, toAccountId={}, toUserId={}, result={}]",
+                id, userId, amount, toAccountId, toUserId, savedAccount)
+
+        return savedAccount
+    }
+
+    private fun validate(amount: BigDecimal) {
+        if (amount <= BigDecimal.ZERO) {
+            throw IllegalArgumentException("operations with negative or zero amounts are not permitted")
+        }
+    }
+
+    private fun validate(account: Account) {
+        if (account.amount < BigDecimal.ZERO) {
+            throw IllegalArgumentException("overdraft is not possible")
+        }
+    }
 
 }
