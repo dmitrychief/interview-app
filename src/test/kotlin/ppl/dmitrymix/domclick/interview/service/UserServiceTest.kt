@@ -2,9 +2,11 @@ package ppl.dmitrymix.domclick.interview.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.AdditionalAnswers.returnsFirstArg
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataAccessException
 import ppl.dmitrymix.domclick.interview.entity.Account
 import ppl.dmitrymix.domclick.interview.entity.User
 import ppl.dmitrymix.domclick.interview.repository.AccountRepository
@@ -41,6 +43,28 @@ class UserServiceTest : AbstractServiceTest() {
     }
 
     @Test
+    fun update_should_updateUser() {
+        val user = User(1, "name")
+        `when`(userRepository.findById(1)).thenReturn(Optional.of(user))
+        `when`(userRepository.save(any<User>())).thenAnswer(returnsFirstArg<User>())
+
+        val expectedUser = user.copy(name= "name2")
+
+        assertThat(userService.update(1, "name2")).isEqualTo(expectedUser)
+        verify(userRepository).save(expectedUser)
+    }
+
+    @Test
+    fun update_should_fail_when_userNotFound() {
+        `when`(userRepository.findById(1)).thenReturn(Optional.empty())
+
+
+        assertThrows<DataAccessException> {
+            userService.update(1, "name2")
+        }
+    }
+
+    @Test
     fun delete_should_dropUserAccount() {
         val userToDelete = User(1, "name")
         `when`(userRepository.findById(1)).thenReturn(Optional.of(userToDelete))
@@ -53,5 +77,14 @@ class UserServiceTest : AbstractServiceTest() {
         val inOrder = inOrder(accountRepository, userRepository)
         inOrder.verify(accountRepository).deleteAll(accountsToDelete)
         inOrder.verify(userRepository).delete(userToDelete)
+    }
+
+    @Test
+    fun delete_should_fail_when_userNotFound() {
+        `when`(userRepository.findById(1)).thenReturn(Optional.empty())
+
+        assertThrows<DataAccessException> {
+            userService.delete(1)
+        }
     }
 }
