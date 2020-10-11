@@ -41,30 +41,30 @@ class AccountServiceTest : AbstractServiceTest() {
 
     @Test
     fun delete_should_dropUserAccount() {
-        val accountToDelete = Account(1, 1, BigDecimal.ONE)
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenReturn(accountToDelete)
+        val accountToDelete = Account(1, 2, BigDecimal.ONE)
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenReturn(accountToDelete)
 
-        accountService.delete(1, 1)
+        accountService.delete(1, 2)
 
         verify(accountRepository).delete(accountToDelete)
     }
 
     @Test
     fun delete_should_fail_when_accountNotFound() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
 
         assertThrows<DataAccessException> {
-            accountService.delete(1, 1)
+            accountService.delete(1, 2)
         }
     }
 
     @Test
     fun transferIn_should_addAmount() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenReturn(Account(1, 1, BigDecimal.ONE))
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenReturn(Account(1, 2, BigDecimal.ONE))
         `when`(accountRepository.save(any<Account>())).thenAnswer(returnsFirstArg<Account>())
 
-        val expectedAccount = Account(1, 1, BigDecimal.valueOf(2))
-        val savedAccount = accountService.transferIn(1, 1, BigDecimal.ONE)
+        val expectedAccount = Account(1, 2, BigDecimal.valueOf(2))
+        val savedAccount = accountService.transferIn(1, 2, BigDecimal.ONE)
 
         assertThat(savedAccount).isEqualTo(expectedAccount)
         verify(accountRepository).save(expectedAccount)
@@ -72,10 +72,10 @@ class AccountServiceTest : AbstractServiceTest() {
 
     @Test
     fun transferIn_should_fail_when_accountNotFound() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
 
         assertThrows<DataAccessException> {
-            accountService.transferIn(1, 1, BigDecimal.ONE)
+            accountService.transferIn(1, 2, BigDecimal.ONE)
         }
     }
 
@@ -89,11 +89,11 @@ class AccountServiceTest : AbstractServiceTest() {
 
     @Test
     fun transferOut_should_subAmount() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenReturn(Account(1, 1, BigDecimal.ONE))
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenReturn(Account(1, 2, BigDecimal.ONE))
         `when`(accountRepository.save(any<Account>())).thenAnswer(returnsFirstArg<Account>())
 
-        val expectedAccount = Account(1, 1, BigDecimal.ZERO)
-        val savedAccount = accountService.transferOut(1, 1, BigDecimal.ONE)
+        val expectedAccount = Account(1, 2, BigDecimal.ZERO)
+        val savedAccount = accountService.transferOut(1, 2, BigDecimal.ONE)
 
         assertThat(savedAccount).isEqualTo(expectedAccount)
         verify(accountRepository).save(expectedAccount)
@@ -101,10 +101,10 @@ class AccountServiceTest : AbstractServiceTest() {
 
     @Test
     fun transferOut_should_fail_when_accountNotFound() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenThrow(IncorrectResultSizeDataAccessException::class.java)
 
         assertThrows<DataAccessException> {
-            accountService.transferOut(1, 1, BigDecimal.ONE)
+            accountService.transferOut(1, 2, BigDecimal.ONE)
         }
     }
 
@@ -118,24 +118,24 @@ class AccountServiceTest : AbstractServiceTest() {
 
     @Test
     fun transferOut_should_fail_when_overdraftHappens() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenReturn(Account(1, 1, BigDecimal.ZERO))
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenReturn(Account(1, 2, BigDecimal.ZERO))
 
         assertThrows<IllegalArgumentException> {
-            accountService.transferOut(1, 1, BigDecimal.ONE)
+            accountService.transferOut(1, 2, BigDecimal.ONE)
         }
     }
 
     @Test
     fun transferTo_should_moveAmountBetweenAccounts() {
-        `when`(accountRepository.findByIdAndUserId(1, 1)).thenReturn(Account(1, 1, BigDecimal.ONE))
-        `when`(accountRepository.findByIdAndUserId(2, 2)).thenReturn(Account(2, 2, BigDecimal.ONE))
+        `when`(accountRepository.findByIdAndUserId(1, 2)).thenReturn(Account(1, 2, BigDecimal.ONE))
+        `when`(accountRepository.findByIdAndUserId(3, 4)).thenReturn(Account(3, 4, BigDecimal.ONE))
         `when`(accountRepository.save(any<Account>())).thenAnswer(returnsFirstArg<Account>())
 
-        val expectedAccount = Account(1, 1, BigDecimal.ZERO)
-        val savedAccount = accountService.transferTo(1, 1, BigDecimal.ONE, 2, 2)
+        val expectedAccount = Account(1, 2, BigDecimal.ZERO)
+        val savedAccount = accountService.transferTo(1, 2, BigDecimal.ONE, 3, 4)
 
         verify(accountRepository).save(expectedAccount)
-        verify(accountRepository).save(Account(2, 2, BigDecimal.valueOf(2)))
+        verify(accountRepository).save(Account(3, 4, BigDecimal.valueOf(2)))
 
         assertThat(savedAccount).isEqualTo(expectedAccount)
     }
