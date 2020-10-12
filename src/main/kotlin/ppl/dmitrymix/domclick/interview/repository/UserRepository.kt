@@ -1,8 +1,13 @@
 package ppl.dmitrymix.domclick.interview.repository
 
+import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import ppl.dmitrymix.domclick.interview.entity.User
 
 @Repository
-interface UserRepository : CrudRepository<User, Long>
+interface UserRepository : CrudRepository<User, Long> {
+    @Query("select * from users where name=:name")
+    fun findByName(@Param("name") name: String): User?
+}
