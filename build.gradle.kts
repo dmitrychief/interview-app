@@ -61,11 +61,11 @@ tasks.withType<KotlinCompile> {
 }
 
 springBoot {
-	mainClassName = "ppl.dmitrymix.domclick.interview.DomclickInterviewApplication"
+	mainClassName = "ppl.dmitrymix.interview.InterviewApplication"
 }
 
 jib {
 	to {
-		image = "dmikhailov1/domclick-interview"
+		image = "dmikhailov1/app-interview"
 	}
 }

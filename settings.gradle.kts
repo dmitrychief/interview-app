@@ -1,1 +1,1 @@
-rootProject.name = "dmikhailov-domclick-interview-test"
+rootProject.name = "dmikhailov-interview-test"

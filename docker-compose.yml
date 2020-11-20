@@ -14,9 +14,9 @@ services:
       timeout: 5s
       retries: 5
 
-  domclick-interview:
-    image: dmikhailov1/domclick-interview
-    container_name: domclick-interview
+  app-interview:
+    image: dmikhailov1/app-interview
+    container_name: app-interview
     ports:
       - "8080:8080"
     depends_on:
